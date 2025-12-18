@@ -15,7 +15,7 @@ const io = socketIo(server, {
 
 // 中间件
 app.use(cors());
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(__dirname));
 
 // 存储房间和用户信息
 const rooms = new Map();
