@@ -3,182 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2025 网络加密通话系统</title>
-    <!-- 引入 PeerJS 核心库 -->
-    <script src="unpkg.com"></script>
+    <title>网页免费电话</title>
     <style>
-        :root {
-            --bg-color: #f0f2f5;
-            --cardinden: #ffffff;
-            --primary: #007AFF;
-            --danger: #FF3B30;
-            --text: #1c1c1e;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-color); color: var(--text); display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .phone-card { background: var(--cardinden); width: 340px; padding: 30px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; }
-        .status-bar { display: flex; align-items: center; justify-content: center; font-size: 14px; margin-bottom: 20px; color: #8e8e93; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; margin-right: 8px; }
-        .dot.active { background: #34C759; box-shadow: 0 0 8px #34C759; }
-        .id-section { background: #f8f9fa; border: 1px dashed var(--primary); padding: 15px; border-radius: 12px; margin-bottom: 20px; cursor: pointer; transition: background 0.2s; }
-        .id-section:hover { background: #eff6ff; }
-        .my-id-label { font-size: 12px; color: #666; margin-bottom: 5px; }
-        #my-id { font-weight: bold; color: var(--primary); font-family: monospace; font-size: 18px; }
-        input { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; box-sizing: border-box; margin-bottom: 15px; outline: none; transition: border 0.2s; }
-        input:focus { border-color: var(--primary); }
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
-        .btn:active { transform: scale(0.98); }
-        .call-btn { background: var(--primary); color: white; }
-        .hangup-btn { background: var(--danger); color: white; display: none; }
-        #timer { margin-top: 15px; font-size: 14px; font-weight: 500; color: var(--danger); }
-        .hint { font-size: 11px; color: #aeaeb2; margin-top: 20px; line-height: 1.4; }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .phone-header {
+            margin-bottom: 30px;
+        }
+
+        .phone-header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .dialer {
+            margin: 20px 0;
+        }
+
+        .phone-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: monospace;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .key {
+            padding: 20px;
+            font-size: 20px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .key:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .key:active {
+            transform: translateY(0);
+        }
+
+        .call-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .call-button.call {
+            background: #28a745;
+            color: white;
+        }
+
+        .call-button.hangup {
+            background: #dc3545;
+            color: white;
+        }
+
+        .call-button:hover {
+            transform: scale(1.1);
+        }
+
+        .call-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .video-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .video-container.active {
+            display: block;
+        }
+
+        video {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            border-radius: 10px;
+            margin: 5px;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+        }
+
+        .control-btn:hover {
+            background: #0056b3;
+        }
+
+        .messages {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .message {
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background: white;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
+    <div class="phone-container">
+        <div class="phone-header">
+            <h1>📞 网页电话</h1>
+            <div class="status disconnected" id="connectionStatus">未连接</div>
+        </div>
 
-<div class="phone-card">
-    <div class="status-bar">
-        <span id="status-dot" class="dot"></span>
-        <span id="status-text">正在初始化服务器...</span>
+        <div class="dialer">
+            <input type="text" class="phone-input" id="phoneInput" placeholder="输入房间号或用户ID" readonly>
+            
+            <div class="keypad">
+                <button class="key" data-digit="1">1</button>
+                <button class="key" data-digit="2">2</button>
+                <button class="key" data-digit="3">3</button>
+                <button class="key" data-digit="4">4</button>
+                <button class="key" data-digit="5">5</button>
+                <button class="key" data-digit="6">6</button>
+                <button class="key" data-digit="7">7</button>
+                <button class="key" data-digit="8">8</button>
+                <button class="key" data-digit="9">9</button>
+                <button class="key" data-digit="*">*</button>
+                <button class="key" data-digit="0">0</button>
+                <button class="key" data-digit="#">#</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="call-button call" id="callBtn">📞</button>
+            <button class="call-button hangup" id="hangupBtn" disabled>📵</button>
+        </div>
+
+        <div class="video-container" id="videoContainer">
+            <video id="localVideo" autoplay muted playsinline></video>
+            <video id="remoteVideo" autoplay playsinline></video>
+        </div>
+
+        <div class="messages" id="messages"></div>
     </div>
 
-    <div class="id-section" onclick="copyMyID()">
-        <div class="my-id-label">您的专属通话ID (点击复制)</div>
-        <div id="my-id">获取中...</div>
-    </div>
-
-    <input type="text" id="remote-id" placeholder="输入对方的通话ID">
-    
-    <button id="call-btn" class="btn call-btn" onclick="startCall()">开始加密通话</button>
-    <button id="hangup-btn" class="btn hangup-btn" onclick="endCall()">挂断通话</button>
-
-    <div id="timer"></div>
-
-    <div class="hint">
-        * 本方案基于WebRTC P2P技术，通话完全免费且端到端加密。<br>
-        * 必须在HTTPS环境下运行方可启用麦克风。
-    </div>
-</div>
-
-<!-- 隐藏的音频播放器 -->
-<audio id="remoteAudio" autoplay></audio>
-
-<script>
-    let peer = new Peer(); // 使用 PeerJS 公共信令服务器
-    let currentCall = null;
-    let timerInterval;
-
-    // 1. 初始化：获取ID
-    peer.on('open', (id) => {
-        document.getElementById('my-id').innerText = id;
-        document.getElementById('status-text').innerText = "在线：等待呼叫";
-        document.getElementById('status-dot').classList.add('active');
-    });
-
-    // 2. 监听呼入通话 (被动方)
-    peer.on('call', (call) => {
-        if (confirm("收到来自对方的语音通话请求，是否接听？")) {
-            navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-                .then((stream) => {
-                    call.answer(stream); // 应答并发送本地流
-                    handleCallConnection(call);
-                })
-                .catch(err => alert("麦克风权限被拒绝，无法接听。"));
-        }
-    });
-
-    // 3. 发起通话 (主动方)
-    function startCall() {
-        const targetId = document.getElementById('remote-id').value;
-        if (!targetId) return alert("请输入对方的 ID");
-
-        document.getElementById('status-text').innerText = "正在请求麦克风...";
-        
-        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-            .then((stream) => {
-                const call = peer.call(targetId, stream);
-                document.getElementById('status-text').innerText = "呼叫中...";
-                handleCallConnection(call);
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('status-text').innerText = "麦克风授权失败";
-                alert("请确保在HTTPS环境下运行并允许麦克风权限。");
-            });
-    }
-
-    // 4. 统一处理连接状态
-    function handleCallConnection(call) {
-        currentCall = call;
-        updateUI(true);
-
-        // 接收到对方声音流
-        call.on('stream', (remoteStream) => {
-            const audio = document.getElementById('remoteAudio');
-            audio.srcObject = remoteStream;
-            document.getElementById('status-text').innerText = "正在通话...";
-            startTimer();
-        });
-
-        // 对方挂断
-        call.on('close', () => {
-            resetCallState();
-        });
-
-        // 错误处理
-        call.on('error', (err) => {
-            alert("通话发生错误: " + err.type);
-            resetCallState();
-        });
-    }
-
-    // 5. 挂断与重置
-    function endCall() {
-        if (currentCall) currentCall.close();
-        resetCallState();
-    }
-
-    function resetCallState() {
-        updateUI(false);
-        document.getElementById('status-text').innerText = "在线：等待呼叫";
-        clearInterval(timerInterval);
-        document.getElementById('timer').innerText = "";
-        const audio = document.getElementById('remoteAudio');
-        audio.srcObject = null;
-    }
-
-    // 工具函数：UI 切换
-    function updateUI(isCalling) {
-        document.getElementById('call-btn').style.display = isCalling ? 'none' : 'block';
-        document.getElementById('hangup-btn').style.display = isCalling ? 'block' : 'none';
-        document.getElementById('remote-id').disabled = isCalling;
-    }
-
-    // 工具函数：计时器
-    function startTimer() {
-        let sec = 0;
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            sec++;
-            let m = Math.floor(sec / 60).toString().padStart(2, '0');
-            let s = (sec % 60).toString().padStart(2, '0');
-            document.getElementById('timer').innerText = `通话中 ${m}:${s}`;
-        }, 1000);
-    }
-
-    // 工具函数：复制ID
-    function copyMyID() {
-        const id = document.getElementById('my-id').innerText;
-        if (id === "获取中...") return;
-        navigator.clipboard.writeText(id).then(() => {
-            alert("通话ID已复制！发送给朋友即可开始通话。");
-        });
-    }
-
-    // 异常断线处理
-    peer.on('disconnected', () => {
-        document.getElementById('status-text').innerText = "连接已断开，请刷新";
-        document.getElementById('status-dot').classList.remove('active');
-    });
-</script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
