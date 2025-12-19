@@ -3,226 +3,951 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网页免费电话</title>
+    <title>免费网页电话</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            font-family: 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a2a6c, #2a3c7f, #4a5f9f);
+            color: #fff;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
         }
-
-        .phone-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .phone-header {
-            margin-bottom: 30px;
-        }
-
-        .phone-header h1 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .status {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        .status.connected {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status.disconnected {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .dialer {
-            margin: 20px 0;
-        }
-
-        .phone-input {
-            width: 100%;
-            padding: 15px;
-            font-size: 18px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-family: monospace;
-        }
-
-        .keypad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .key {
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-            font-size: 20px;
-            background: #f8f9fa;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            width: 100%;
         }
-
-        .key:hover {
-            background: #e9ecef;
-            transform: translateY(-2px);
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
         }
-
-        .key:active {
-            transform: translateY(0);
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #00c9ff, #92fe9d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-
-        .call-button {
-            width: 80px;
-            height: 80px;
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .control-panel {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .video-panel {
+            flex: 2;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-container {
+            position: relative;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            flex: 1;
+            min-height: 300px;
+        }
+        
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-label {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .video-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .control-btn {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: none;
-            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
             cursor: pointer;
-            margin: 0 10px;
             transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-
-        .call-button.call {
-            background: #28a745;
+        
+        .call-btn {
+            background: linear-gradient(to right, #00b09b, #96c93d);
             color: white;
         }
-
-        .call-button.hangup {
-            background: #dc3545;
+        
+        .end-call-btn {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
             color: white;
         }
-
-        .call-button:hover {
-            transform: scale(1.1);
+        
+        .toggle-btn {
+            background: linear-gradient(to right, #2193b0, #6dd5ed);
+            color: white;
         }
-
-        .call-button:disabled {
+        
+        .control-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .control-btn:active {
+            transform: translateY(0);
+        }
+        
+        .control-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
-
-        .video-container {
-            margin-top: 20px;
-            display: none;
+        
+        .input-group {
+            margin-bottom: 25px;
         }
-
-        .video-container.active {
+        
+        .input-group label {
             display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
         }
-
-        video {
+        
+        .input-group input, .input-group select {
             width: 100%;
-            height: 200px;
-            background: #000;
-            border-radius: 10px;
-            margin: 5px;
-        }
-
-        .controls {
-            margin-top: 20px;
-        }
-
-        .control-btn {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background: #007bff;
-            color: white;
-        }
-
-        .control-btn:hover {
-            background: #0056b3;
-        }
-
-        .messages {
-            margin-top: 20px;
             padding: 15px;
-            background: #f8f9fa;
             border-radius: 10px;
-            max-height: 200px;
-            overflow-y: auto;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            color: #333;
         }
-
-        .message {
-            padding: 5px 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            background: white;
-            text-align: left;
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 201, 255, 0.7);
+        }
+        
+        .status {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff4757;
+        }
+        
+        .status.connected .status-icon {
+            background: #2ed573;
+        }
+        
+        .server-config {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+        
+        .server-config h3 {
+            margin-bottom: 15px;
+            color: #00c9ff;
+        }
+        
+        .instructions {
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            border-radius: 15px;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 15px;
+            color: #92fe9d;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            line-height: 1.6;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        .call-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .call-option-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .call-option-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .call-option-btn.active {
+            background: rgba(0, 201, 255, 0.3);
+            border: 1px solid #00c9ff;
         }
     </style>
 </head>
 <body>
-    <div class="phone-container">
-        <div class="phone-header">
-            <h1>📞 网页电话</h1>
-            <div class="status disconnected" id="connectionStatus">未连接</div>
-        </div>
-
-        <div class="dialer">
-            <input type="text" class="phone-input" id="phoneInput" placeholder="输入房间号或用户ID">
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-phone-alt"></i> 免费网页电话</h1>
+            <p>基于WebRTC技术，无需安装任何软件，直接在浏览器中进行高质量音视频通话</p>
+        </header>
+        
+        <div class="app-container">
+            <div class="control-panel">
+                <h2><i class="fas fa-cogs"></i> 通话控制</h2>
+                
+                <div class="input-group">
+                    <label for="user-id"><i class="fas fa-user"></i> 您的用户ID</label>
+                    <input type="text" id="user-id" placeholder="输入您的用户名" value="用户_${Math.floor(Math.random() * 1000)}">
+                </div>
+                
+                <div class="input-group">
+                    <label for="call-to-id"><i class="fas fa-phone"></i> 呼叫对方ID</label>
+                    <input type="text" id="call-to-id" placeholder="输入对方用户名">
+                </div>
+                
+                <div class="call-options">
+                    <button class="call-option-btn active" id="audio-call-btn">
+                        <i class="fas fa-phone"></i> 音频通话
+                    </button>
+                    <button class="call-option-btn" id="video-call-btn">
+                        <i class="fas fa-video"></i> 视频通话
+                    </button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="server-url"><i class="fas fa-server"></i> 信令服务器地址</label>
+                    <input type="text" id="server-url" placeholder="ws://localhost:8080" value="wss://free-web-phone-signaling.glitch.me">
+                    <small>使用默认服务器或部署自己的服务器（见下方说明）</small>
+                </div>
+                
+                <div class="status" id="connection-status">
+                    <div class="status-icon"></div>
+                    <span>未连接到信令服务器</span>
+                </div>
+                
+                <div class="video-controls">
+                    <button class="control-btn call-btn" id="call-button" title="开始通话">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                    <button class="control-btn toggle-btn" id="toggle-audio" title="切换音频">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="control-btn toggle-btn" id="toggle-video" title="切换视频">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="control-btn end-call-btn" id="end-call-button" title="结束通话" disabled>
+                        <i class="fas fa-phone-slash"></i>
+                    </button>
+                </div>
+            </div>
             
-            <div class="keypad">
-                <button class="key" data-digit="1">1</button>
-                <button class="key" data-digit="2">2</button>
-                <button class="key" data-digit="3">3</button>
-                <button class="key" data-digit="4">4</button>
-                <button class="key" data-digit="5">5</button>
-                <button class="key" data-digit="6">6</button>
-                <button class="key" data-digit="7">7</button>
-                <button class="key" data-digit="8">8</button>
-                <button class="key" data-digit="9">9</button>
-                <button class="key" data-digit="*">*</button>
-                <button class="key" data-digit="0">0</button>
-                <button class="key" data-digit="#">#</button>
+            <div class="video-panel">
+                <h2><i class="fas fa-video"></i> 视频通话</h2>
+                
+                <div class="video-container">
+                    <video id="local-video" autoplay muted playsinline></video>
+                    <div class="video-label">本地视频</div>
+                </div>
+                
+                <div class="video-container">
+                    <video id="remote-video" autoplay playsinline></video>
+                    <div class="video-label">远程视频</div>
+                </div>
             </div>
         </div>
+        
+        <div class="server-config">
+            <h3><i class="fas fa-cloud-upload-alt"></i> 服务器部署指南</h3>
+            <p>如需自建信令服务器，请按照以下步骤操作：</p>
+            
+            <div class="instructions">
+                <h4><i class="fas fa-server"></i> 信令服务器 (Node.js + WebSocket)</h4>
+                <ol>
+                    <li>创建一个新目录，并在其中创建 <code>server.js</code> 文件</li>
+                    <li>复制以下服务器代码到文件中：</li>
+                </ol>
+                <pre style="background: #1e1e1e; padding: 15px; border-radius: 8px; overflow: auto; color: #f8f8f2; margin: 15px 0;">
+<code>// server.js - WebRTC信令服务器
+const WebSocket = require('ws');
 
-        <div class="controls">
-            <button class="call-button call" id="callBtn">📞</button>
-            <button class="call-button hangup" id="hangupBtn" disabled>📵</button>
+// 创建WebSocket服务器，监听8080端口
+const wss = new WebSocket.Server({ port: 8080 });
+const users = {};
+
+// 处理客户端连接
+wss.on('connection', (ws) => {
+  let userId = null;
+  
+  // 处理客户端消息
+  ws.on('message', (message) => {
+    const data = JSON.parse(message);
+    
+    switch (data.type) {
+      case 'register':
+        // 用户注册
+        userId = data.userId;
+        users[userId] = ws;
+        console.log(`用户注册: ${userId}`);
+        
+        // 通知用户注册成功
+        ws.send(JSON.stringify({
+          type: 'registered',
+          userId: userId
+        }));
+        
+        // 发送在线用户列表
+        broadcastUserList();
+        break;
+        
+      case 'offer':
+        // 发送offer给被呼叫方
+        console.log(`Offer from ${data.from} to ${data.to}`);
+        if (users[data.to]) {
+          users[data.to].send(JSON.stringify({
+            type: 'offer',
+            from: data.from,
+            offer: data.offer
+          }));
+        }
+        break;
+        
+      case 'answer':
+        // 发送answer给呼叫方
+        console.log(`Answer from ${data.from} to ${data.to}`);
+        if (users[data.to]) {
+          users[data.to].send(JSON.stringify({
+            type: 'answer',
+            from: data.from,
+            answer: data.answer
+          }));
+        }
+        break;
+        
+      case 'candidate':
+        // 转发ICE候选
+        if (users[data.to]) {
+          users[data.to].send(JSON.stringify({
+            type: 'candidate',
+            from: data.from,
+            candidate: data.candidate
+          }));
+        }
+        break;
+        
+      case 'callEnd':
+        // 转发通话结束消息
+        if (users[data.to]) {
+          users[data.to].send(JSON.stringify({
+            type: 'callEnd',
+            from: data.from
+          }));
+        }
+        break;
+    }
+  });
+  
+  // 处理连接关闭
+  ws.on('close', () => {
+    if (userId) {
+      delete users[userId];
+      console.log(`用户断开连接: ${userId}`);
+      broadcastUserList();
+    }
+  });
+  
+  // 广播在线用户列表给所有用户
+  function broadcastUserList() {
+    const userList = Object.keys(users);
+    const message = JSON.stringify({
+      type: 'userList',
+      users: userList
+    });
+    
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message);
+      }
+    });
+  }
+});
+
+console.log('信令服务器运行在 ws://localhost:8080');</code></pre>
+                
+                <ol start="3">
+                    <li>安装依赖：<code>npm install ws</code></li>
+                    <li>运行服务器：<code>node server.js</code></li>
+                    <li>将前端页面中的服务器地址改为 <code>ws://你的服务器IP:8080</code></li>
+                </ol>
+            </div>
+            
+            <div class="instructions">
+                <h4><i class="fas fa-globe"></i> 通过Glitch免费部署（推荐）</h4>
+                <ol>
+                    <li>访问 <a href="https://glitch.com" target="_blank" style="color: #00c9ff;">glitch.com</a> 并注册账号</li>
+                    <li>点击 "New Project" → "Import from GitHub"</li>
+                    <li>使用GitHub仓库: <code>https://github.com/yourusername/webrtc-signaling-server</code> (需先上传上述代码到GitHub)</li>
+                    <li>或直接在Glitch中创建新项目，将上面的服务器代码复制到<code>server.js</code></li>
+                    <li>在 <code>package.json</code> 中添加依赖：<code>"dependencies": { "ws": "^8.0.0" }</code></li>
+                    <li>Glitch会自动部署，记下项目URL，将前端页面中的服务器地址改为 <code>wss://你的项目名.glitch.me</code></li>
+                </ol>
+            </div>
         </div>
-
-        <div class="video-container" id="videoContainer">
-            <video id="localVideo" autoplay muted playsinline></video>
-            <video id="remoteVideo" autoplay playsinline></video>
+        
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> 使用说明</h3>
+            <ol>
+                <li>输入您的用户名（可选，默认自动生成）</li>
+                <li>输入对方的用户名（对方也需要打开此页面并注册用户名）</li>
+                <li>选择音频或视频通话模式</li>
+                <li>点击电话按钮开始呼叫</li>
+                <li>对方接听后即可开始通话</li>
+                <li>点击麦克风或摄像头图标可切换开启/关闭</li>
+                <li>通话结束后点击挂断按钮</li>
+                <li>如需自建服务器，请按照上方服务器部署指南操作</li>
+            </ol>
         </div>
-
-        <div class="messages" id="messages"></div>
     </div>
+    
+    <footer>
+        <p>© 2023 免费网页电话系统 | 基于WebRTC技术 | 本应用仅用于学习和演示目的</p>
+    </footer>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="app.js"></script>
+    <script>
+        // 全局变量
+        let localStream = null;
+        let remoteStream = null;
+        let peerConnection = null;
+        let socket = null;
+        let isCaller = false;
+        let isInCall = false;
+        let isAudioCall = true;
+        
+        // DOM元素
+        const userIdInput = document.getElementById('user-id');
+        const callToIdInput = document.getElementById('call-to-id');
+        const serverUrlInput = document.getElementById('server-url');
+        const connectionStatus = document.getElementById('connection-status');
+        const callButton = document.getElementById('call-button');
+        const endCallButton = document.getElementById('end-call-button');
+        const toggleAudioButton = document.getElementById('toggle-audio');
+        const toggleVideoButton = document.getElementById('toggle-video');
+        const localVideo = document.getElementById('local-video');
+        const remoteVideo = document.getElementById('remote-video');
+        const audioCallBtn = document.getElementById('audio-call-btn');
+        const videoCallBtn = document.getElementById('video-call-btn');
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 自动生成用户ID
+            userIdInput.value = `用户_${Math.floor(Math.random() * 10000)}`;
+            
+            // 连接信令服务器
+            connectToSignalingServer();
+            
+            // 设置事件监听器
+            setupEventListeners();
+            
+            // 请求媒体设备权限
+            requestMediaDevices();
+        });
+        
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 呼叫按钮
+            callButton.addEventListener('click', startCall);
+            
+            // 结束通话按钮
+            endCallButton.addEventListener('click', endCall);
+            
+            // 切换音频按钮
+            toggleAudioButton.addEventListener('click', toggleAudio);
+            
+            // 切换视频按钮
+            toggleVideoButton.addEventListener('click', toggleVideo);
+            
+            // 通话模式切换
+            audioCallBtn.addEventListener('click', () => {
+                audioCallBtn.classList.add('active');
+                videoCallBtn.classList.remove('active');
+                isAudioCall = true;
+            });
+            
+            videoCallBtn.addEventListener('click', () => {
+                videoCallBtn.classList.remove('active');
+                audioCallBtn.classList.add('active');
+                isAudioCall = false;
+            });
+            
+            // 重新连接服务器
+            serverUrlInput.addEventListener('change', connectToSignalingServer);
+        }
+        
+        // 连接到信令服务器
+        function connectToSignalingServer() {
+            const serverUrl = serverUrlInput.value;
+            
+            if (socket) {
+                socket.close();
+            }
+            
+            updateConnectionStatus('正在连接服务器...', false);
+            
+            try {
+                socket = new WebSocket(serverUrl);
+                
+                socket.addEventListener('open', () => {
+                    updateConnectionStatus('已连接到信令服务器', true);
+                    registerUser();
+                });
+                
+                socket.addEventListener('message', handleSignalingMessage);
+                
+                socket.addEventListener('error', () => {
+                    updateConnectionStatus('连接服务器失败', false);
+                });
+                
+                socket.addEventListener('close', () => {
+                    updateConnectionStatus('服务器连接已关闭', false);
+                });
+            } catch (error) {
+                updateConnectionStatus('连接错误: ' + error.message, false);
+            }
+        }
+        
+        // 注册用户
+        function registerUser() {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const userId = userIdInput.value.trim();
+                socket.send(JSON.stringify({
+                    type: 'register',
+                    userId: userId
+                }));
+            }
+        }
+        
+        // 处理信令消息
+        function handleSignalingMessage(event) {
+            const data = JSON.parse(event.data);
+            
+            switch (data.type) {
+                case 'registered':
+                    console.log('注册成功:', data.userId);
+                    break;
+                    
+                case 'offer':
+                    handleOffer(data);
+                    break;
+                    
+                case 'answer':
+                    handleAnswer(data);
+                    break;
+                    
+                case 'candidate':
+                    handleCandidate(data);
+                    break;
+                    
+                case 'callEnd':
+                    handleCallEnd(data);
+                    break;
+                    
+                case 'userList':
+                    console.log('在线用户:', data.users);
+                    break;
+            }
+        }
+        
+        // 开始呼叫
+        async function startCall() {
+            const callerId = userIdInput.value.trim();
+            const calleeId = callToIdInput.value.trim();
+            
+            if (!callerId || !calleeId) {
+                alert('请输入您的用户名和对方用户名');
+                return;
+            }
+            
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                alert('未连接到服务器，请检查服务器连接');
+                return;
+            }
+            
+            isCaller = true;
+            isInCall = true;
+            
+            // 创建对等连接
+            createPeerConnection();
+            
+            // 添加本地流
+            if (localStream) {
+                localStream.getTracks().forEach(track => {
+                    peerConnection.addTrack(track, localStream);
+                });
+            }
+            
+            // 创建offer
+            try {
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                
+                // 发送offer给对方
+                socket.send(JSON.stringify({
+                    type: 'offer',
+                    from: callerId,
+                    to: calleeId,
+                    offer: offer
+                }));
+                
+                updateUIForCall(true);
+            } catch (error) {
+                console.error('创建offer失败:', error);
+                endCall();
+            }
+        }
+        
+        // 处理收到的offer
+        async function handleOffer(data) {
+            if (isInCall) {
+                // 如果已经在通话中，拒绝新呼叫
+                socket.send(JSON.stringify({
+                    type: 'callEnd',
+                    from: userIdInput.value.trim(),
+                    to: data.from
+                }));
+                return;
+            }
+            
+            const acceptCall = confirm(`${data.from} 正在呼叫您，是否接听？`);
+            
+            if (acceptCall) {
+                isCaller = false;
+                isInCall = true;
+                
+                // 设置被呼叫方用户名
+                callToIdInput.value = data.from;
+                
+                // 创建对等连接
+                createPeerConnection();
+                
+                // 添加本地流
+                if (localStream) {
+                    localStream.getTracks().forEach(track => {
+                        peerConnection.addTrack(track, localStream);
+                    });
+                }
+                
+                // 设置远程描述
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+                
+                // 创建answer
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                
+                // 发送answer给呼叫方
+                socket.send(JSON.stringify({
+                    type: 'answer',
+                    from: userIdInput.value.trim(),
+                    to: data.from,
+                    answer: answer
+                }));
+                
+                updateUIForCall(true);
+            } else {
+                // 拒绝呼叫
+                socket.send(JSON.stringify({
+                    type: 'callEnd',
+                    from: userIdInput.value.trim(),
+                    to: data.from
+                }));
+            }
+        }
+        
+        // 处理收到的answer
+        async function handleAnswer(data) {
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+        }
+        
+        // 处理收到的ICE候选
+        async function handleCandidate(data) {
+            if (peerConnection && data.candidate) {
+                try {
+                    await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+                } catch (error) {
+                    console.error('添加ICE候选失败:', error);
+                }
+            }
+        }
+        
+        // 处理通话结束
+        function handleCallEnd() {
+            alert('对方已结束通话');
+            endCall();
+        }
+        
+        // 创建对等连接
+        function createPeerConnection() {
+            const configuration = {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    { urls: 'stun:stun2.l.google.com:19302' },
+                    { urls: 'stun:stun3.l.google.com:19302' },
+                    { urls: 'stun:stun4.l.google.com:19302' }
+                ]
+            };
+            
+            peerConnection = new RTCPeerConnection(configuration);
+            
+            // 处理远程流
+            peerConnection.ontrack = (event) => {
+                if (remoteVideo.srcObject !== event.streams[0]) {
+                    remoteVideo.srcObject = event.streams[0];
+                    remoteStream = event.streams[0];
+                }
+            };
+            
+            // 处理ICE候选
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate && socket && socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({
+                        type: 'candidate',
+                        from: userIdInput.value.trim(),
+                        to: callToIdInput.value.trim(),
+                        candidate: event.candidate
+                    }));
+                }
+            };
+            
+            // 处理连接状态变化
+            peerConnection.onconnectionstatechange = () => {
+                console.log('连接状态:', peerConnection.connectionState);
+                if (peerConnection.connectionState === 'disconnected' || 
+                    peerConnection.connectionState === 'failed' ||
+                    peerConnection.connectionState === 'closed') {
+                    endCall();
+                }
+            };
+        }
+        
+        // 请求媒体设备权限
+        async function requestMediaDevices() {
+            try {
+                const constraints = {
+                    audio: true,
+                    video: true
+                };
+                
+                localStream = await navigator.mediaDevices.getUserMedia(constraints);
+                localVideo.srcObject = localStream;
+                
+                // 初始禁用视频（如果是音频通话模式）
+                if (isAudioCall) {
+                    const videoTracks = localStream.getVideoTracks();
+                    videoTracks.forEach(track => track.enabled = false);
+                    toggleVideoButton.innerHTML = '<i class="fas fa-video-slash"></i>';
+                }
+            } catch (error) {
+                console.error('获取媒体设备失败:', error);
+                alert('无法访问摄像头或麦克风，请检查设备权限设置');
+            }
+        }
+        
+        // 切换音频
+        function toggleAudio() {
+            if (localStream) {
+                const audioTracks = localStream.getAudioTracks();
+                if (audioTracks.length > 0) {
+                    const isEnabled = audioTracks[0].enabled;
+                    audioTracks[0].enabled = !isEnabled;
+                    toggleAudioButton.innerHTML = isEnabled ? 
+                        '<i class="fas fa-microphone-slash"></i>' : 
+                        '<i class="fas fa-microphone"></i>';
+                }
+            }
+        }
+        
+        // 切换视频
+        function toggleVideo() {
+            if (localStream) {
+                const videoTracks = localStream.getVideoTracks();
+                if (videoTracks.length > 0) {
+                    const isEnabled = videoTracks[0].enabled;
+                    videoTracks[0].enabled = !isEnabled;
+                    toggleVideoButton.innerHTML = isEnabled ? 
+                        '<i class="fas fa-video-slash"></i>' : 
+                        '<i class="fas fa-video"></i>';
+                }
+            }
+        }
+        
+        // 结束通话
+        function endCall() {
+            if (isInCall) {
+                // 发送通话结束消息
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({
+                        type: 'callEnd',
+                        from: userIdInput.value.trim(),
+                        to: callToIdInput.value.trim()
+                    }));
+                }
+            }
+            
+            // 关闭对等连接
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+            
+            // 停止远程视频流
+            if (remoteVideo.srcObject) {
+                remoteVideo.srcObject.getTracks().forEach(track => track.stop());
+                remoteVideo.srcObject = null;
+            }
+            
+            isInCall = false;
+            isCaller = false;
+            
+            updateUIForCall(false);
+        }
+        
+        // 更新连接状态显示
+        function updateConnectionStatus(message, isConnected) {
+            const statusIcon = connectionStatus.querySelector('.status-icon');
+            const statusText = connectionStatus.querySelector('span');
+            
+            statusText.textContent = message;
+            
+            if (isConnected) {
+                connectionStatus.classList.add('connected');
+            } else {
+                connectionStatus.classList.remove('connected');
+            }
+        }
+        
+        // 更新UI状态
+        function updateUIForCall(isCallActive) {
+            if (isCallActive) {
+                callButton.disabled = true;
+                endCallButton.disabled = false;
+                userIdInput.disabled = true;
+                callToIdInput.disabled = true;
+                audioCallBtn.disabled = true;
+                videoCallBtn.disabled = true;
+            } else {
+                callButton.disabled = false;
+                endCallButton.disabled = true;
+                userIdInput.disabled = false;
+                callToIdInput.disabled = false;
+                audioCallBtn.disabled = false;
+                videoCallBtn.disabled = false;
+            }
+        }
+    </script>
 </body>
 </html>
